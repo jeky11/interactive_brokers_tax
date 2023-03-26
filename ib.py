@@ -33,7 +33,7 @@ currencies = {
     "EUR": ["01239", "EURRUB=X", None],
 }
 
-StartDate = "20.03.2019"
+StartDate = "12.05.2022"
 
 Year = int(input("Введите год отчета: "))
 
