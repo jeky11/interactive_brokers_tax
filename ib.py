@@ -618,7 +618,7 @@ def create_doc():
         'deduction_sum': deduction_sum,
         'tbl_fees': fees_res.to_dict(orient='records') if fees_res is not None else {},
         'fees_rub_sum': fees_rub_sum,
-        'deduction_total_sum': (fees_rub_sum + deduction_sum).round(2)
+        'deduction_total_sum': round(fees_rub_sum + deduction_sum, 2)
     }
     doc.render(context)
     doc.save(Fname)
