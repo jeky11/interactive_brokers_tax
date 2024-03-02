@@ -31,6 +31,7 @@ currencies = {
     "RUB": [],
     "USD": ["01235", "RUB=X", None],
     "EUR": ["01239", "EURRUB=X", None],
+    "CNH": ["01375", "CNHRUB=X", None]
 }
 
 StartDate = "12.05.2022"
@@ -170,7 +171,7 @@ def load_data():
             data[section] = df
         else:
             df.columns = data[section].columns
-            data[section] = data[section].append(df, ignore_index=True)
+            data[section] = pd.concat([data[section], df], ignore_index=True)
     if "Deposits & Withdrawals" in data:
         cashflow = data["Deposits & Withdrawals"]
         cashflow.columns = [col.lower().strip() for col in cashflow]
@@ -371,7 +372,7 @@ def div_calc():
     res["currency"] = div["currency"].values
     if div_tax is None:
         print("Не найдена таблица удержанного налога с дивидендов. Налог на дивиденды будет 13%")
-    res["tax_paid"] = -div_tax["amount"].values.round(2) if div_tax is not None else 0
+    res["tax_paid"] = -div_tax["amount"].values.astype(np.double).round(2) if div_tax is not None else 0
     res["cur_price"] = [get_currency(row.date, row.currency) for _, row in div.iterrows()]
     res["amount_rub"] = (res.amount*res.cur_price).round(2)
     res["tax_paid_rub"] = (res.tax_paid*res.cur_price).round(2)
