@@ -1,6 +1,7 @@
 /.git
 /.idea
 /ibdata
+/ib_venv
 *яснительная записка*.docx
 *.xlsx
 *.bat
