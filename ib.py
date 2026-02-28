@@ -409,7 +409,10 @@ def div_accurals_calc():
     res["amount_rub"] = (res.amount*res.cur_price).round(2)
     res["tax_paid_rub"] = (res.tax_paid*res.cur_price).round(2)
     res["tax_full_rub"] = (res.amount_rub*13/100).round(2)
-    res["tax_rest_rub"] = (res.tax_full_rub - res.tax_paid_rub).round(2)
+    # Зачет иностранного налога ограничен величиной НДФЛ РФ (по модулю) для каждой операции.
+    # Это важно для reversal-строк: иначе при удержании > 13% может появляться ложная "доплата".
+    tax_credit_rub = np.sign(res.tax_paid_rub) * np.minimum(res.tax_paid_rub.abs(), res.tax_full_rub.abs())
+    res["tax_rest_rub"] = (res.tax_full_rub - tax_credit_rub).round(2)
     return res
 
 if div_accurals is not None:
